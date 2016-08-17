@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"golang.org/x/crypto/bcrypt"
 	"fmt"
-	"encoding"
+	"encoding/json"
 )
 
 type User struct {
@@ -32,8 +32,27 @@ func (u *User)HashPassword() error {
 	return nil
 }
 
+func (u *User)VerifyPassword() error {
+
+	cmd := Connection().Get(u.Username)
+	r, err := cmd.Result()
+	if err != nil {
+		return err
+	}
+	var foundUser User
+	if json.Unmarshal([]byte(r), &foundUser); err != nil {
+		return err
+	}
+
+	return bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(u.Password))
+}
+
 func (u *User)Create() error {
-	cmd := Connection().Set(u.Username, encoding.BinaryMarshaler(u), 0)
+	userJson, err := json.Marshal(u)
+	if err != nil {
+		return err
+	}
+	cmd := Connection().Set(u.Username, userJson, 0)
 	if _, err := cmd.Result(); err != nil {
 		return err
 	}
