@@ -23,7 +23,7 @@ func authServer() {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.CloseNotify)
-	r.Use(middleware.Timeout(60 * time.Second))
+	r.Use(middleware.Timeout(60 * time.Minute))
 
 	r.Mount("/debug", middleware.Profiler())
 
