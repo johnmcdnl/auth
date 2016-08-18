@@ -7,13 +7,9 @@ import (
 )
 
 var audience = "audience"
+var issuer = "issuer"
 
-type CustomClaims struct {
-	*jwt.StandardClaims
-}
-
-func claims(u *User) CustomClaims {
-	var c CustomClaims
+func claims(u *User) *jwt.StandardClaims {
 	var s jwt.StandardClaims
 
 	now := time.Now()
@@ -22,14 +18,11 @@ func claims(u *User) CustomClaims {
 
 	s.Audience = audience
 	s.IssuedAt = now.Unix()
-	s.NotBefore = now.Unix()
-	s.ExpiresAt = now.Add(100 * time.Minute).Unix()
+	s.ExpiresAt = now.Add(23 * time.Hour).Unix()
 
-	s.Issuer = "Issuer"
+	s.Issuer = issuer
 
 	s.Subject = u.Username
 
-	c.StandardClaims = &s
-
-	return c
+	return &s
 }

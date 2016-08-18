@@ -2,10 +2,16 @@ package main
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/satori/go.uuid"
+	//"github.com/satori/go.uuid"
+	"fmt"
 )
 
-var secret = []byte(uuid.NewV4().String())
+func init(){
+	fmt.Println(string(secret))
+}
+
+//var secret = []byte(uuid.NewV4().String())
+var secret = []byte("247af323-6c90-4b7b-b836-ef2cccb43c6d")
 
 func GenerateJwt(u *User) (*JWTAccessToken, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims(u))
