@@ -35,7 +35,6 @@ func validateJWT(s string) error {
 		return errors.New("No Authorization header provided")
 	}
 
-	//TODO strip the bearer
 	split := strings.Split(s, " ")
 
 	if len(split) !=2 {
