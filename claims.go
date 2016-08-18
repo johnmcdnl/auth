@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-var audience = "audience"
-var issuer = "issuer"
+var audience = "john-applications"
+var issuer = "john-mc-donnell-login-app"
 
 func claims(u *User) *jwt.StandardClaims {
 	var s jwt.StandardClaims
@@ -18,7 +18,7 @@ func claims(u *User) *jwt.StandardClaims {
 
 	s.Audience = audience
 	s.IssuedAt = now.Unix()
-	s.ExpiresAt = now.Add(23 * time.Hour).Unix()
+	s.ExpiresAt = now.Add(5 * time.Hour).Unix()
 
 	s.Issuer = issuer
 

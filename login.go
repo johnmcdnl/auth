@@ -16,14 +16,18 @@ func loginRouter() chi.Router {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-
-	u, err := bindUserFromRequest(r)
-	if err!=nil{
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if r.ContentLength <= 0 {
+		http.Error(w, "Request body is required", http.StatusBadRequest)
 		return
 	}
 
-	if err := isValidLoginUser(u); err!=nil {
+	u, err := bindUserFromRequest(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := isValidLoginUser(u); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -37,7 +41,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := u.VerifyPassword(); err!=nil{
+	if err := u.VerifyPassword(); err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
@@ -66,3 +70,6 @@ func isValidLoginUser(u *User) error {
 
 	return nil
 }
+
+
+

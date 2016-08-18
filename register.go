@@ -16,6 +16,10 @@ func registerRouter() chi.Router {
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Body==nil{
+		http.Error(w, "Request body is required", http.StatusBadRequest)
+		return
+	}
 	u, err := bindUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
