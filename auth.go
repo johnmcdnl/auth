@@ -7,6 +7,7 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 	"time"
+	"github.com/johnmcdnl/auth/auth"
 )
 
 const port int = 8600
@@ -27,7 +28,7 @@ func authServer() {
 
 	r.Mount("/debug", middleware.Profiler())
 
-	r.Mount("/auth", AuthRouter())
+	r.Mount("/auth", auth.AuthRouter())
 
 	http.ListenAndServe(fmt.Sprint(":", port), r)
 }
