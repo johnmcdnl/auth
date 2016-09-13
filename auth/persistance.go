@@ -1,40 +1,35 @@
 package auth
 
 import (
-	"fmt"
 	"gopkg.in/redis.v4"
-	"os"
-	"sync"
 	"log"
 )
 
 var client *redis.Client
-var once sync.Once
 
+func Connection() (*redis.Client, error) {
 
-func Connection() *redis.Client {
-	once.Do(func() {
+	var err error
+
+	if client ==nil{
 		log.Println("Creating a *redis.Client")
-		client = NewClient()
-	})
+		client, err = NewClient()
+	}
 
-	return client
+
+
+	return client, err
 }
 
-func NewClient() *redis.Client{
+func NewClient() (*redis.Client, error) {
 
 	client = redis.NewClient(&redis.Options{
-		Addr:     "http:/172.17.0.0:6379",
+		Addr:     "redis:6379",
 		Password: "", // no password set
 		DB:       0, // use default DB
 	})
 
 	_, err := client.Ping().Result()
 
-	if err != nil {
-		fmt.Println("Couldn't find a REDIS server")
-		os.Exit(1)
-	}
-
-	return client
+	return client, err
 }

@@ -34,8 +34,15 @@ func (u *User) HashPassword() error {
 
 func (u *User) VerifyPassword() error {
 
-	cmd := Connection().Get(u.Username)
-	r, err := cmd.Result()
+	conn, err := Connection()
+	if err != nil {
+		return err
+	}
+	c := conn.Get(u.Username)
+	if err != nil {
+		return err
+	}
+	r, err := c.Result()
 	if err != nil {
 		return err
 	}
@@ -52,17 +59,24 @@ func (u *User) Create() error {
 	if err != nil {
 		return err
 	}
-	cmd := Connection().Set(u.Username, userJson, 0)
-	if _, err := cmd.Result(); err != nil {
+	conn, err := Connection()
+	if err != nil {
+		return err
+	}
+	c := conn.Set(u.Username, userJson, 0)
+	if _, err := c.Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (u *User) Exists() (bool, error) {
-	cmd := Connection().Get(u.Username)
-
-	res, err := cmd.Result()
+	conn, err := Connection()
+	if err != nil {
+		return false, err
+	}
+	c := conn.Get(u.Username)
+	res, err := c.Result()
 	if res == "" {
 		return false, nil
 	}

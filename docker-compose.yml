@@ -1,0 +1,11 @@
+version: '2'
+services:
+  auth:
+    build: .
+    links:
+      - redis
+    ports:
+      - "8600:8600"
+  redis:
+    image: redis
+
