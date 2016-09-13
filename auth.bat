@@ -1,7 +1,7 @@
 cls
 go get
-godep save ./...
-go build
+godep save
+godep update
 go install
 cls
-auth.exe
+docker build -t auth .
