@@ -5,6 +5,7 @@ import (
 	"gopkg.in/redis.v4"
 	"os"
 	"sync"
+	"log"
 )
 
 var client *redis.Client
@@ -13,15 +14,17 @@ var once sync.Once
 
 func Connection() *redis.Client {
 	once.Do(func() {
-		NewClient()
+		log.Println("Creating a *redis.Client")
+		client = NewClient()
 	})
+
 	return client
 }
 
-func NewClient() {
+func NewClient() *redis.Client{
 
 	client = redis.NewClient(&redis.Options{
-		Addr:     "http://192.168.0.9:6379",
+		Addr:     "http:/172.17.0.0:6379",
 		Password: "", // no password set
 		DB:       0, // use default DB
 	})
@@ -33,4 +36,5 @@ func NewClient() {
 		os.Exit(1)
 	}
 
+	return client
 }
