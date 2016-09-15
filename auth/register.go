@@ -18,41 +18,40 @@ func RegisterRouter() chi.Router {
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Body == nil {
-		http.Error(w, "Request body is required", http.StatusBadRequest)
+		render.JSON(w, http.StatusBadRequest, "Request body is required")
 		return
 	}
 	u, err := bindUserFromRequest(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		render.JSON(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	if err := isValidRegistrationUser(u); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		render.JSON(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	if exists, err := u.Exists(); exists || err != nil {
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			render.JSON(w, http.StatusInternalServerError, err.Error())
 			return
 		}
-		http.Error(w, "user exists", http.StatusConflict)
+		render.JSON(w, http.StatusConflict, "user exists")
 		return
 	}
 
 	if err := u.HashPassword(); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		render.JSON(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	if err := u.Create(); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		render.JSON(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	render.Status(r, http.StatusCreated)
-	render.JSON(w, r, u)
+	render.JSON(w, http.StatusCreated, u)
 }
 
 func isValidRegistrationUser(u *User) error {
