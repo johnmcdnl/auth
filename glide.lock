@@ -1,0 +1,29 @@
+hash: 2ca895e616edd3371a61713d56ff6dfe5fa3f20d179d0f1d5bf04f06f5a8820c
+updated: 2016-09-15T21:30:41.085218+01:00
+imports:
+- name: github.com/dgrijalva/jwt-go
+  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
+- name: github.com/pressly/chi
+  version: 6f98a44e7c65714ec00fa402a991d19da34cee86
+  subpackages:
+  - middleware
+  - render
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+- name: golang.org/x/crypto
+  version: 81372b2fc2f10bef2a7f338da115c315a56b2726
+  subpackages:
+  - bcrypt
+  - blowfish
+- name: gopkg.in/bsm/ratelimit.v1
+  version: db14e161995a5177acef654cb0dd785e8ee8bc22
+- name: gopkg.in/redis.v4
+  version: 938235994ea88a05678f8060741d5f34ed6a5ff3
+  subpackages:
+  - internal
+  - internal/consistenthash
+  - internal/errors
+  - internal/hashtag
+  - internal/pool
+  - internal/proto
+testImports: []
