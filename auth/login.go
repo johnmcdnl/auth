@@ -17,42 +17,50 @@ func LoginRouter() chi.Router {
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.ContentLength <= 0 {
-		render.JSON(w, http.StatusBadRequest, errors.New("Request body is required"))
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, errors.New("Request body is required"))
 		return
 	}
 
 	u, err := bindUserFromRequest(r)
 	if err != nil {
-		render.JSON(w, http.StatusBadRequest, err.Error())
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
 		return
 	}
 
 	if err := isValidLoginUser(u); err != nil {
-		render.JSON(w, http.StatusBadRequest, err.Error())
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
 		return
 	}
 
 	if exists, err := u.Exists(); !exists || err != nil {
 		if err != nil {
-			render.JSON(w, http.StatusInternalServerError, err.Error())
+			render.Status(r, http.StatusInternalServerError)
+			render.JSON(w, r, err.Error())
 			return
 		}
-		render.JSON(w, http.StatusUnauthorized, "No Such User")
+		render.Status(r, http.StatusUnauthorized)
+		render.JSON(w, r, "No Such User")
 		return
 	}
 
 	if err := u.VerifyPassword(); err != nil {
-		render.JSON(w, http.StatusUnauthorized, "Bad Password")
+		render.Status(r, http.StatusUnauthorized)
+		render.JSON(w, r, "Bad Password")
 		return
 	}
 
 	ss, err := GenerateJwt(u)
 	if err != nil {
-		render.JSON(w, http.StatusInternalServerError, err.Error())
+		render.Status(r, http.StatusInternalServerError)
+		render.JSON(w, r, err.Error())
 		return
 	}
 
-	render.JSON(w, http.StatusOK, ss)
+	render.Status(r, http.StatusOK)
+	render.JSON(w, r, ss)
 }
 
 func isValidLoginUser(u *User) error {
